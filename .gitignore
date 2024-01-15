@@ -1,3 +1,4 @@
 /target/
 /.idea/
 /infra/infra-deployment/.terraform/
+/infra/infra-deployment/.terraform.lock.hcl/
