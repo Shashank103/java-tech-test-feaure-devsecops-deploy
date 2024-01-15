@@ -1,0 +1,27 @@
+[
+  {
+    "name": "${task_family_name}",
+    "image": "${image_name}",
+    "portMappings": [
+      {
+        "hostPort": ${port},
+      "protocol": "tcp",
+      "containerPort": ${port}
+    }
+    ],
+    "networkMode": "awsvpc",
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${log_group}",
+        "awslogs-region": "${region}",
+        "awslogs-stream-prefix": "ecs"
+      }
+    },
+    "environment": [
+    ],
+    "mountPoints": [],
+    "essential": true,
+    "volumesFrom": []
+  }
+]
