@@ -53,5 +53,54 @@ mvn clean test
 ### Deploy the supermarket checkout java application in AWS
 - Deploy the application using container or as a lambda securely in AWS using IaC
 - Implement CDN caching for the application
-- You have two days to come up with the solution, share the URL to the app and the github code
-- Reach out to disha.2.gupta@bt.com to arrange the review 
+
+
+## Solution  
+<hr/>
+
+### I deployed the java application on the ECS cluster. I have created all the required resources in AWS cloud by using terraform. 
+
+### 1. Dockerize the application by writing the Dockerfile and push into the ECR repository.
+```
+# Stage 1: Build the application
+FROM openjdk:17.0.1-slim AS builder
+
+WORKDIR /app
+
+# Copy only the necessary files for Maven dependency resolution
+COPY pom.xml .
+COPY src ./src
+
+# Build the application
+RUN apt-get update && \
+    apt-get install -y maven && \
+    mvn clean install
+
+# Stage 2: Create the final image
+FROM openjdk:17.0.1-slim
+
+WORKDIR /app
+
+# Copy only the compiled artifacts from the previous stage
+COPY --from=builder /app/target/tdd-supermarket-1.0.0-SNAPSHOT.jar .
+
+# Expose the port your application will run on
+EXPOSE 8080
+
+# Command to run the application
+CMD ["java", "-jar", "tdd-supermarket-1.0.0-SNAPSHOT.jar"]
+```
+
+### 2. Created required terraform modules to provision the ECS cluster and deploy the application on ECS.
+Module path : ```infra/modules```
+
+Modules: ```VPC, network, security-group, iam, ecs-cluster, ecr, cloudfront, alb, ecs-service``` 
+
+
+### 3. Call the modules from the infra-deployment folder by using the tfvars file.
+
+### Application is accessable on ALB URL.
+http://accolite-devl-load-balancer-1126341871.us-east-1.elb.amazonaws.com/
+
+### ***Note***
+As I don't have any domain that's why application is only accessable by using the ALB URL but IAC code related to the cloudfront and route53 record is present in the cloudfront module.
