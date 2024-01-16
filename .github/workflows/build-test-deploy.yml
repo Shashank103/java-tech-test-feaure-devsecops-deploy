@@ -26,10 +26,14 @@ jobs:
 
     steps:
       - name: Configure AWS Credentials
+        id: creds
         uses: aws-actions/configure-aws-credentials@v4
         with: 
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::211125330084:role/infra-provisioning-role
+      - name: get caller identity 1
+        run: |
+          aws sts get-caller-identity    
       - name: Tag Docker image
         run: docker tag supermarket-ecr:latest ${{ steps.ecr_login.outputs.registry }}/supermarket-ecr:latest
 
