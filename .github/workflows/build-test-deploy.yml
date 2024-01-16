@@ -25,11 +25,11 @@ jobs:
     needs: build-and-test
 
     steps:
-      - name: Assume AWS Role
-        run: |
-          ROLE_ARN="arn:aws:iam::211125330084:role/infra-provisioning-role"
-          ROLE_SESSION_NAME="GitHubActions"
-          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 211125330084.dkr.ecr.us-east-1.amazonaws.com
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with: 
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::211125330084:role/infra-provisioning-role
       - name: Tag Docker image
         run: docker tag supermarket-ecr:latest ${{ steps.ecr_login.outputs.registry }}/supermarket-ecr:latest
 
