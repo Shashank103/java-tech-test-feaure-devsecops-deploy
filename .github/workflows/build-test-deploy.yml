@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout code
@@ -20,7 +20,7 @@ jobs:
         run: docker run supermarket-ecr mvn clean test
 
   push-to-ecr:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     needs: build-and-test
 
