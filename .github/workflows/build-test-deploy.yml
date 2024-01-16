@@ -25,9 +25,11 @@ jobs:
     needs: build-and-test
 
     steps:
-      - name: Configure AWS CLI
+      - name: Assume AWS Role
         run: |
-          export AWS_PROFILE=terraform 
+          ROLE_ARN="arn:aws:iam::211125330084:role/infra-provisioning-role"
+          ROLE_SESSION_NAME="GitHubActions"
+          TEMP_ROLE=$(aws sts assume-role --role-arn "$ROLE_ARN" --role-session-name "$ROLE_SESSION_NAME")
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
 
