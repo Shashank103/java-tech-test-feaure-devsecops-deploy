@@ -25,6 +25,9 @@ jobs:
     needs: build-and-test
 
     steps:
+      - name: Configure AWS CLI
+        run: |
+          export AWS_PROFILE=terraform 
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
 
